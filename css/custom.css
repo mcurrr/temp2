@@ -1,0 +1,23 @@
+body {
+  margin: 20px 0;
+  padding: 0;
+}
+.outcomes {
+  display: inline-block;
+  z-index: 999;
+  height: 50px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.coefShow {
+  color: #008000;
+}
+.coefNoShow {
+  color: #f00;
+  text-decoration: line-through;
+}
+ul {
+  list-style: none;
+  background-color: #ffc0cb;
+}
