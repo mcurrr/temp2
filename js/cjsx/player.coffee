@@ -40,7 +40,7 @@ Player =
       innerPlayer.onPlay ->
         if !!Player.wasPaused
           innerPlayer.stop()
-          console.log 'removed'
+          console.log 'stopped'
           innerPlayer.play()
           Player.wasPaused = false
         else
