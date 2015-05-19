@@ -25,11 +25,13 @@ App = React.createClass
 
   componentWillMount: ->
     player.init()
-#get the list of all live events
+#get the list of all live events (CORS request)
     $.ajax
-      url: 'https://www.favbet.com/live/markets/'
-      cache: false
+      type: 'GET'
       dataType: 'json'
+      xhrFields:
+        withCredentials: true
+      url: 'https://www.favbet.com/live/markets/'
       error: (xhr, ajaxOptions, thrownError) ->
         console.log 'error on first request'
         console.log xhr.status
@@ -93,9 +95,11 @@ App = React.createClass
 
   _getIdTv: () ->
     $.ajax
+      type: 'GET'
       url: "https://www.favbet.com/live/markets/event/#{@state.events[@state.current.i].event_id}/"
-      cache: false
-      dataType: 'json'
+      contentType: 'text/plain'
+      xhrFields:
+        withCredentials: false
       error: (xhr, ajaxOptions, thrownError) ->
         console.log xhr.status
         console.log thrownError
@@ -184,15 +188,19 @@ App = React.createClass
   _getVideoStreamPath: () ->
 #get current id_tv
     $.ajax
+      type: 'GET'
       url: "https://www.favbet.com/live/tv/#{@state.current.id_tv}/"
-      cache: false
-      dataType: 'xml'
-      error: (xhr, ajaxOptions, thrownError) ->
+      contentType: 'text/plain'
+      xhrFields:
+        withCredentials: false
+      error: (xhr, ajaxOptions, thrownError) =>
         console.log xhr.status
         console.log thrownError
-        current.url = ''
+        url = ''
+        current = @state.current
+        current.url = url
         @setState(
-          current: current
+          current: current 
         )
         if xhr.status == 403
           console.log "YOU NEED TO LOG IN"
@@ -218,9 +226,11 @@ App = React.createClass
           url = url.replace /%26/g, '&'
           if url.match /^http/
             $.ajax
+              type: 'GET'
               url: url
-              cache: false
-              dataType: 'xml'
+              contentType: 'text/plain'
+              xhrFields:
+                withCredentials: false
               error: (xhr, ajaxOptions, thrownError) ->
                 console.log xhr.status
                 console.log thrownError

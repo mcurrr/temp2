@@ -8,7 +8,7 @@ body {
   height: 50px;
   position: absolute;
   top: 20px;
-  right: 20px;
+  left: 20px;
 }
 .coefShow {
   color: #008000;
@@ -20,4 +20,5 @@ body {
 ul {
   list-style: none;
   background-color: #ffc0cb;
+  padding: 0;
 }

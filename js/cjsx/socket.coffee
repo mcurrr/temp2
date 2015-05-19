@@ -5,7 +5,7 @@ window.socket = $.bullet 'wss://www.favbet.com/bullet'
 
 window.socket.onopen = ->
   console.log "window.socket opened"
-  window.socket.send(JSON.stringify {user_ssid: "E669F82ECA98BE6EB6D37EDAB1"})
+  window.socket.send(JSON.stringify {user_ssid: "F5758A3F039C8AF974E76859DE"})
   window.socket.send(JSON.stringify {
             dataop: {
               "live.event": ["all"]
@@ -139,26 +139,52 @@ sortMessage = (e) ->
           window.App.setState(
             events: events
             )
-          console.log "IS", window.App.state.events.length
+          console.log "IS", events.length
           console.log "ACTION-=-=-=-=-#{del[0].event_name} DELETED!"
-          
+#if deleted event was active then stop streaming it
+          if !!del[0].active
+            current = window.App.state.current
+            current.i = null
+            current.url = ''
+            ###
+            SET STATE HERE
+            ###
+            window.App.setState(
+              current: current
+              )
+            console.log "IT WAS ACTIVE. CHOOSE ANOTHER ONE"
+          else
+            current = window.App.state.current
+            events = window.App.state.events
+            actElem = _.find events, (event) ->
+              !!event.active
+            current.i = _.indexOf events, actElem
+            console.log "now current.i = #{current.i} because of deleting"
+            ###
+            SET STATE HERE
+            ###
+            window.App.setState(
+              current: current
+              )
+
       when 'event.insert'
         events = window.App.state.events
-#checking if it is watcheble
+#checking if it is watchable
         if inCome.data.event_tv_channel?
           inCome.data.new = true
           console.log "WAS", events.length
           events.push inCome.data
 #sorting new array by the event name
-          console.log "events before sorting -", events
+          console.log "active event before sorting -", _.pluck events, 'active'
+          console.log events
           sortedEvents = _.sortBy events, 'event_name'
-          console.log "events after sorting -", sortedEvents
+          console.log "active event after sorting -", _.pluck sortedEvents, 'active'
+          console.log sortedEvents
 #recounting current.i
           current = window.App.state.current
           console.log "current.i was = #{current.i}"
           actElem = _.find sortedEvents, (event) ->
             !!event.active
-#            console.log "current.i was = #{current.i}"
           current.i = _.indexOf sortedEvents, actElem
           console.log "now current.i = #{current.i} because of new incoming"
           ###
