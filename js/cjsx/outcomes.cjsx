@@ -6,7 +6,7 @@ Outcomes = React.createClass
   render: ->
     <div className='outcomes' style={"position": "absolute", "color": "blue"}>
       <ul>{
-        if @props.current.i? && @props.events[@props.current.i].head_market? && @props.events[@props.current.i].head_market.outcomes?
+        if @props.current.i? && @props.events[@props.current.i].head_market? && !!@props.events[@props.current.i].head_market.outcomes
           if @props.events[@props.current.i].head_market.market_suspend == 'no'
             style = 'coefShow'
           else
